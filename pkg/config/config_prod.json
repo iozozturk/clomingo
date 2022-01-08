@@ -1,0 +1,7 @@
+{
+  "host": "localhost:8080",
+  "googleProjectId": "your-gcp-project-id",
+  "googleClientIds": [
+    "your-google-client-id.apps.googleusercontent.com"
+  ]
+}

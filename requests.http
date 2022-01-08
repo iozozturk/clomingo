@@ -1,0 +1,19 @@
+### CLOMINGO API
+
+### Sample request
+GET http://localhost:8080/
+
+### Google Login
+POST http://localhost:8080/auth/google
+Content-Type: application/json
+X-Installation-Id: unique-device-id
+
+{
+  "token": "google sign in token captured",
+  "pushToken": "push-notification-token"
+}
+
+### SignOut
+POST http://localhost:8080/auth/signout
+Content-Type: application/json
+X-Installation-Id: unique-device-id
