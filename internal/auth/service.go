@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-type AuthService struct {
+type Service struct {
 	logger         *zap.Logger
 	conf           *config.ApplicationConf
-	userRepo       *user.UserRepo
-	sessionService *session.SessionService
+	userRepo       *user.Repo
+	sessionService *session.Service
 }
 
-func (s *AuthService) googleLogin(ctx context.Context, token string, pushToken string) (*session.Session, error) {
+func (s *Service) googleLogin(ctx context.Context, token string, pushToken string) (*session.Session, error) {
 	payload, err := idtoken.Validate(ctx, token, s.conf.GoogleClientIds[2])
 	if err != nil {
 		s.logger.Warn("cannot google login, wrong id token", zap.Error(err), zap.String("token", token))
@@ -34,7 +34,7 @@ func (s *AuthService) googleLogin(ctx context.Context, token string, pushToken s
 		Timestamp:  now,
 		Timeupdate: now,
 	}
-	existingUser, err := s.userRepo.GetUserByEmail(ctx, u.Email)
+	existingUser, err := s.userRepo.GetByEmail(ctx, u.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -61,13 +61,13 @@ func (s *AuthService) googleLogin(ctx context.Context, token string, pushToken s
 	}
 }
 
-func (s *AuthService) SignOut(ctx context.Context) {
+func (s *Service) SignOut(ctx context.Context) {
 	sessionId := ctx.Value(keys.Session).(session.Session).Id
 	s.sessionService.Delete(ctx, sessionId)
 }
 
-func NewAuthService(logger *zap.Logger, conf *config.ApplicationConf, userRepo *user.UserRepo, sessionService *session.SessionService) *AuthService {
-	return &AuthService{
+func NewAuthService(logger *zap.Logger, conf *config.ApplicationConf, userRepo *user.Repo, sessionService *session.Service) *Service {
+	return &Service{
 		logger:         logger,
 		conf:           conf,
 		userRepo:       userRepo,

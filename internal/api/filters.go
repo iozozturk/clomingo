@@ -11,7 +11,7 @@ import (
 
 type Filter struct {
 	logger         *zap.Logger
-	sessionService *session.SessionService
+	sessionService *session.Service
 }
 
 func (f *Filter) CommonAuthenticated(next http.HandlerFunc) http.HandlerFunc {
@@ -79,7 +79,7 @@ func (f *Filter) ExtractMeta(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func NewFilter(logger *zap.Logger, service *session.SessionService) *Filter {
+func NewFilter(logger *zap.Logger, service *session.Service) *Filter {
 	return &Filter{
 		logger:         logger,
 		sessionService: service,

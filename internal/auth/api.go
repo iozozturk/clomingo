@@ -19,7 +19,7 @@ type Handler struct {
 	logger  *zap.Logger
 	filters *api.Filter
 	conf    *config.ApplicationConf
-	authSvc *AuthService
+	authSvc *Service
 }
 
 func (h *Handler) SetupRoutes(mux *http.ServeMux) {
@@ -65,7 +65,7 @@ func (h *Handler) SignOut() http.HandlerFunc {
 	}
 }
 
-func NewHandler(logger *zap.Logger, filter *api.Filter, conf *config.ApplicationConf, service *AuthService) *Handler {
+func NewHandler(logger *zap.Logger, filter *api.Filter, conf *config.ApplicationConf, service *Service) *Handler {
 	return &Handler{
 		logger:  logger,
 		filters: filter,

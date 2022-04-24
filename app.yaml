@@ -1,0 +1,7 @@
+runtime: go116
+
+env_variables:
+  ENV: "dev"
+
+main: ./cmd
+

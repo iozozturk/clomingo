@@ -19,6 +19,9 @@ Enjoy! Or buy me a coffee and we enjoy together :)
 * Uses `Zap` from Uber for logging
 * Uses `Google Cloud Datastore` for database connection
 * Uses `Google Sign In` for authentication flow
+* Uses `App Engine` for deployment
+* Contains `Dockerfile` for deployment to other environments such as `Cloud Run, Kubernetes`
+* Contains `Makefile` for building and deploying
 * Includes sample requests in `requests.http` file that you can easily run with Intellij IDEs
 * No frontend implemented
 * REST backend for all kind of your SPA or mobile applications

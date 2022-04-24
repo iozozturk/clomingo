@@ -7,12 +7,12 @@ import (
 	"go.uber.org/zap"
 )
 
-type UserRepo struct {
+type Repo struct {
 	logger *zap.Logger
 	ds     *datastore.Client
 }
 
-func (r UserRepo) GetUserByEmail(ctx context.Context, email string) (*User, error) {
+func (r Repo) GetByEmail(ctx context.Context, email string) (*User, error) {
 	var users []User
 	q := datastore.NewQuery("user").Filter("Email =", email).Limit(1)
 	keys, err := r.ds.GetAll(ctx, q, &users)
@@ -28,7 +28,7 @@ func (r UserRepo) GetUserByEmail(ctx context.Context, email string) (*User, erro
 	return &userDb, nil
 }
 
-func (r UserRepo) GetByUserId(ctx context.Context, id int64) (*User, error) {
+func (r Repo) GetByUserId(ctx context.Context, id int64) (*User, error) {
 	var userDb User
 	key := datastore.IDKey("user", id, nil)
 	err := r.ds.Get(ctx, key, &userDb)
@@ -39,7 +39,7 @@ func (r UserRepo) GetByUserId(ctx context.Context, id int64) (*User, error) {
 	return &userDb, nil
 }
 
-func (r UserRepo) Save(ctx context.Context, user *User) (*User, error) {
+func (r Repo) Save(ctx context.Context, user *User) (*User, error) {
 	put, err := r.ds.Put(ctx, datastore.IncompleteKey("user", nil), user)
 	if err != nil {
 		r.logger.Error("cannot save user", zap.Error(err), zap.Any("user", user))
@@ -49,6 +49,6 @@ func (r UserRepo) Save(ctx context.Context, user *User) (*User, error) {
 	return user, err
 }
 
-func NewUserRepo(db *db.Datastore, logger *zap.Logger) *UserRepo {
-	return &UserRepo{ds: db.DS, logger: logger}
+func NewRepo(db *db.Datastore, logger *zap.Logger) *Repo {
+	return &Repo{ds: db.DS, logger: logger}
 }

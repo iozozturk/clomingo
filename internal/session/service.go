@@ -10,14 +10,14 @@ import (
 	"time"
 )
 
-type SessionService struct {
+type Service struct {
 	logger   *zap.Logger
 	conf     *config.ApplicationConf
-	repo     *SessionRepo
-	userRepo *user.UserRepo
+	repo     *Repo
+	userRepo *user.Repo
 }
 
-func (s *SessionService) SaveNewSession(ctx context.Context, userId int64, socialToken string, pushToken string, sessionType SessionType) (*Session, error) {
+func (s *Service) SaveNewSession(ctx context.Context, userId int64, socialToken string, pushToken string, sessionType SessionType) (*Session, error) {
 	newUUID, err := uuid.NewUUID()
 	if err != nil {
 		s.logger.Error("error creating uuid", zap.Error(err))
@@ -50,7 +50,7 @@ func (s *SessionService) SaveNewSession(ctx context.Context, userId int64, socia
 	return sessionDb, nil
 }
 
-func (s *SessionService) GetSessionAndUserByToken(ctx context.Context, sessionToken string) *Session {
+func (s *Service) GetSessionAndUserByToken(ctx context.Context, sessionToken string) *Session {
 	sessionDb, _ := s.repo.GetBySessionToken(ctx, sessionToken)
 	if sessionDb == nil {
 		return nil
@@ -63,12 +63,12 @@ func (s *SessionService) GetSessionAndUserByToken(ctx context.Context, sessionTo
 	return sessionDb
 }
 
-func (s *SessionService) Delete(ctx context.Context, sessionId int64) {
+func (s *Service) Delete(ctx context.Context, sessionId int64) {
 	s.repo.deleteById(ctx, sessionId)
 }
 
-func NewSessionService(logger *zap.Logger, conf *config.ApplicationConf, sessionRepo *SessionRepo, userRepo *user.UserRepo) *SessionService {
-	return &SessionService{
+func NewService(logger *zap.Logger, conf *config.ApplicationConf, sessionRepo *Repo, userRepo *user.Repo) *Service {
+	return &Service{
 		logger:   logger,
 		conf:     conf,
 		repo:     sessionRepo,
